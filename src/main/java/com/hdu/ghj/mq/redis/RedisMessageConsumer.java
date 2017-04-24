@@ -16,6 +16,7 @@ import com.hdu.ghj.thread.StoppableThread;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPubSub;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 public class RedisMessageConsumer implements MessageConsumer {
@@ -98,7 +99,51 @@ public class RedisMessageConsumer implements MessageConsumer {
 	}
 
 	private void startSPMode() {
-
+		final JedisPubSub suber = new JedisPubSub(){
+			public void onMessage(String channel,String messageStr){
+		    	Message message = JSON.toJavaObject(JSON.parseObject(messageStr), Message.class);
+				for(MessageListener listener: listeners){
+					try{
+						listener.onMessageReceived(Arrays.asList(new Message[]{message}));
+					}catch(Exception e){
+						logger.error("", e);
+						if(stoped) return;
+					}
+				}
+			}
+		};
+		thread = new StoppableThread() {
+			
+			@Override
+			protected void doRun() {
+				while(true){
+					if(stoped) break;
+					try{
+						logger.info("start subscribe redis server " + topics);
+						jedis.subscribe(suber, topics.toArray(new String[]{}));
+						logger.warn("redis subscriber escaped unexpected");
+					}catch(Exception e){
+						logger.warn("redis subscriber escaped unexpected", e);
+						jedis.close();
+						if(stoped) break;
+						while(true) {
+							try {
+								jedis = jedisPool.getResource();
+								break;
+							} catch(Exception e1) {
+								try {
+									Thread.sleep(1000);
+								} catch (InterruptedException e2) {
+									if(stoped) break;
+								}
+							}
+						}
+					}
+				}
+			}
+		};
+		
+		thread.start();
 	}
 
 	
