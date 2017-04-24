@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,7 +34,7 @@ public class RedisMessageConsumer implements MessageConsumer {
 
 	private StoppableThread thread = null;
 
-	private static final Logger logger = LogManager.getLogger(RedisMessageConsumer.class);
+	//private static final Logger logger = LogManager.getLogger(RedisMessageConsumer.class);
 
 	public synchronized void startConsume() {
 		if (jedis == null) {
@@ -62,7 +63,7 @@ public class RedisMessageConsumer implements MessageConsumer {
 						try{
 							pairs = jedis.blpop(0, topics);
 						}catch(JedisConnectionException e){
-							logger.warn("redis subscriber escaped unexpected",e);
+							//logger.warn("redis subscriber escaped unexpected",e);
 							jedis.close();
 							while(true){
 								try{
@@ -86,12 +87,12 @@ public class RedisMessageConsumer implements MessageConsumer {
 							try {
 								listener.onMessageReceived(Arrays.asList(new Message[]{message}));
 							} catch(Exception e) {
-								logger.error("", e);
+								//logger.error("", e);
 								break;
 							}
 						}
 					}catch(Exception e){
-						logger.warn("biz error", e);
+						//logger.warn("biz error", e);
 					}
 				}
 			}
@@ -106,7 +107,7 @@ public class RedisMessageConsumer implements MessageConsumer {
 					try{
 						listener.onMessageReceived(Arrays.asList(new Message[]{message}));
 					}catch(Exception e){
-						logger.error("", e);
+						//logger.error("", e);
 						if(stoped) return;
 					}
 				}
@@ -119,11 +120,11 @@ public class RedisMessageConsumer implements MessageConsumer {
 				while(true){
 					if(stoped) break;
 					try{
-						logger.info("start subscribe redis server " + topics);
+						//logger.info("start subscribe redis server " + topics);
 						jedis.subscribe(suber, topics.toArray(new String[]{}));
-						logger.warn("redis subscriber escaped unexpected");
+						//logger.warn("redis subscriber escaped unexpected");
 					}catch(Exception e){
-						logger.warn("redis subscriber escaped unexpected", e);
+						//logger.warn("redis subscriber escaped unexpected", e);
 						jedis.close();
 						if(stoped) break;
 						while(true) {

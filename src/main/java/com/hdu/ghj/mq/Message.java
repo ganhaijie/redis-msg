@@ -11,7 +11,7 @@ public class Message {
 	
 	private Date created=new Date();
 	
-	private String date;
+	private String data;
 	
 	private String topic;
 
@@ -23,12 +23,14 @@ public class Message {
 		this.created = created;
 	}
 
-	public String getDate() {
-		return date;
+
+
+	public String getData() {
+		return data;
 	}
 
-	public void setDate(String date) {
-		this.date = date;
+	public void setData(String data) {
+		this.data = data;
 	}
 
 	public String getTopic() {
