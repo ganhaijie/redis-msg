@@ -9,13 +9,14 @@ import com.hdu.ghj.mq.MessageMode;
 
 import redis.clients.jedis.JedisPool;
 
-public class RedisMessageConsumerFactory implements MessageConsumerFactory{
+
+
+public class RedisMessageConsumerFactory implements MessageConsumerFactory {
 
 	private JedisPool jedisPool;
-	
-	
-	public MessageConsumer craete(List<String> topics, MessageMode mode, List<MessageListener> listeners) {
-		RedisMessageConsumer  consumer = new RedisMessageConsumer();
+
+	public MessageConsumer create(List<String> topics, MessageMode mode, List<MessageListener> listeners) {
+		RedisMessageConsumer consumer = new RedisMessageConsumer();
 		consumer.setListeners(listeners);
 		consumer.setTopics(topics);
 		consumer.setMode(mode);
@@ -23,15 +24,12 @@ public class RedisMessageConsumerFactory implements MessageConsumerFactory{
 		return consumer;
 	}
 
-
 	public JedisPool getJedisPool() {
 		return jedisPool;
 	}
-
 
 	public void setJedisPool(JedisPool jedisPool) {
 		this.jedisPool = jedisPool;
 	}
 
-	
 }

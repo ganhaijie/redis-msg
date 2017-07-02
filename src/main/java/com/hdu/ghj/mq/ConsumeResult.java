@@ -2,7 +2,6 @@ package com.hdu.ghj.mq;
 
 import java.util.List;
 
-
 public class ConsumeResult {
 
 	private boolean success;
@@ -28,4 +27,5 @@ public class ConsumeResult {
 		cr.errorMessages = errorMessages;
 		return cr;
 	}
+	
 }

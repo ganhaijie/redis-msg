@@ -3,6 +3,9 @@ package com.hdu.ghj.mq.redis;
 import java.util.Arrays;
 import java.util.List;
 
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -11,10 +14,8 @@ import com.hdu.ghj.mq.Message;
 import com.hdu.ghj.mq.MessageListener;
 import com.hdu.ghj.mq.MessageMode;
 
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-
 public class TestRedisMq {
+
 	private static String host = "localhost";
 	private static int port = 6379;
 
